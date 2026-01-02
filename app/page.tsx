@@ -1,62 +1,74 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 const BRAND = "Ritmos";
 const LOCATION = "Based in Cambodia";
 
-// Placeholder images (replace later)
-const placeholderImg = "https://via.placeholder.com/300x200?text=Product";
-const logoPlaceholder = "https://via.placeholder.com/150x50?text=Logo";
+type Product = {
+  name: string;
+  price: number;
+  ref: string;
+  img: string;
+  details: string;
+};
 
-const products = {
+const products: Record<string, Product[]> = {
   Signum: [
-    { name: "Signum 1", price: 17.5, ref: "S1 50x124 – Robusto", img: placeholderImg, details: "Medium-bodied with cedar, cream, and light spice." },
-    { name: "Signum 2", price: 18.0, ref: "S2 52x128 – Robusto", img: placeholderImg, details: "Balanced profile with cocoa and toasted oak." },
-    { name: "Signum 3", price: 18.75, ref: "S3 54x135 – Toro", img: placeholderImg, details: "Smooth draw with notes of leather and sweet spice." },
-    { name: "Signum 4", price: 19.88, ref: "S4 56x140 – Toro", img: placeholderImg, details: "Rich smoke with earth, cedar, and cream." },
-    { name: "Signum 5", price: 20.0, ref: "S5 58x150 – Grand Toro", img: placeholderImg, details: "Fuller body with cocoa and roasted coffee." },
-    { name: "Signum 6", price: 26.25, ref: "S6 60x152 – Gordo", img: placeholderImg, details: "Bold and complex with long, elegant finish." }
+    { name: "Signum 1", price: 17.5, ref: "S1 50x124 – Robusto", img: "/images/signum1.jpg", details: "Medium-bodied with cedar, cream, and light spice." },
+    { name: "Signum 2", price: 18.0, ref: "S2 52x128 – Robusto", img: "/images/signum2.jpg", details: "Balanced profile with cocoa and toasted oak." },
+    { name: "Signum 3", price: 18.75, ref: "S3 54x135 – Toro", img: "/images/signum3.jpg", details: "Smooth draw with notes of leather and sweet spice." },
+    { name: "Signum 4", price: 19.88, ref: "S4 56x140 – Toro", img: "/images/signum4.jpg", details: "Rich smoke with earth, cedar, and cream." },
+    { name: "Signum 5", price: 20.0, ref: "S5 58x150 – Grand Toro", img: "/images/signum5.jpg", details: "Fuller body with cocoa and roasted coffee." },
+    { name: "Signum 6", price: 26.25, ref: "S6 60x152 – Gordo", img: "/images/signum6.jpg", details: "Bold and complex with long, elegant finish." }
   ],
   Behemoth: [
-    { name: "Behemoth 52", price: 40.0, ref: "B52 52x152 – Toro", img: placeholderImg, details: "Powerful yet refined, notes of dark chocolate." },
-    { name: "Behemoth 53", price: 46.25, ref: "B53 53x155 – Toro", img: placeholderImg, details: "Deep earthiness with spice and espresso." },
-    { name: "Behemoth 54", price: 46.25, ref: "B54 54x160 – Toro", img: placeholderImg, details: "Bold structure with leather and pepper." },
-    { name: "Behemoth 56", price: 52.5, ref: "B56 56x165 – Toro", img: placeholderImg, details: "Flagship strength with complex evolution." }
+    { name: "Behemoth 52", price: 40.0, ref: "B52 52x152 – Toro", img: "/images/behemoth52.jpg", details: "Powerful yet refined, notes of dark chocolate." },
+    { name: "Behemoth 53", price: 46.25, ref: "B53 53x155 – Toro", img: "/images/behemoth53.jpg", details: "Deep earthiness with spice and espresso." },
+    { name: "Behemoth 54", price: 46.25, ref: "B54 54x160 – Toro", img: "/images/behemoth54.jpg", details: "Bold structure with leather and pepper." },
+    { name: "Behemoth 56", price: 52.5, ref: "B56 56x165 – Toro", img: "/images/behemoth56.jpg", details: "Flagship strength with complex evolution." }
   ],
   Specialty: [
-    { name: "Matador", price: 47.5, ref: "MAT 52x156 – Toro", img: placeholderImg, details: "Elegant, aromatic, and perfectly balanced." },
-    { name: "Superbia", price: 55.0, ref: "SUP 54x160 – Toro", img: placeholderImg, details: "Luxurious smoke with layered sweetness." },
-    { name: "Majesty", price: 57.0, ref: "MAJ 56x165 – Toro", img: placeholderImg, details: "Royal profile with spice and aged wood." },
-    { name: "Regalo", price: 77.5, ref: "REG 58x170 – Flagship", img: placeholderImg, details: "The ultimate expression of White Label." }
+    { name: "Matador", price: 47.5, ref: "MAT 52x156 – Toro", img: "/images/matador.jpg", details: "Elegant, aromatic, and perfectly balanced." },
+    { name: "Superbia", price: 55.0, ref: "SUP 54x160 – Toro", img: "/images/superbia.jpg", details: "Luxurious smoke with layered sweetness." },
+    { name: "Majesty", price: 57.0, ref: "MAJ 56x165 – Toro", img: "/images/majesty.jpg", details: "Royal profile with spice and aged wood." },
+    { name: "Regalo", price: 77.5, ref: "REG 58x170 – Flagship", img: "/images/regalo.jpg", details: "The ultimate expression of White Label." }
   ]
 };
 
 export default function LuxuryCigarSite() {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState<Product | null>(null);
   const [verified, setVerified] = useState(false);
-  const footerRef = useRef<HTMLDivElement>(null);
+
+  const handlePurchaseClick = () => {
+    const footer = document.getElementById("footer");
+    if (footer) footer.scrollIntoView({ behavior: "smooth" });
+  };
 
   if (!verified) {
     return (
       <div className="fixed inset-0 bg-[#232021] text-[#EFE6D8] flex items-center justify-center z-50">
-        <div className="bg-[#2C292A] border border-[#C5A35C] max-w-md p-8 text-center space-y-6">
-          <h1 className="text-2xl">Age Verification</h1>
-          <p>You must be of legal smoking age to enter this site.</p>
-          <button onClick={() => setVerified(true)} className="bg-[#C5A35C] text-black px-6 py-3 rounded">Enter Site</button>
-        </div>
+        <Card className="bg-[#2C292A] border border-[#C5A35C] max-w-md">
+          <CardContent className="p-8 text-center space-y-6">
+            <h1 className="text-2xl">Age Verification</h1>
+            <p>You must be of legal smoking age to enter this site.</p>
+            <Button onClick={() => setVerified(true)} className="bg-[#C5A35C] text-black">Enter Site</Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#232021] text-[#EFE6D8] font-serif min-h-screen">
+    <div className="bg-[#232021] text-[#EFE6D8] font-serif">
 
       {/* Header */}
       <header className="fixed top-0 w-full z-40 backdrop-blur bg-black/20">
         <nav className="flex justify-between items-center px-10 py-5">
-          <img src={logoPlaceholder} alt={BRAND} className="h-12" />
+          <img src="/images/logo.png" alt={BRAND} className="h-12" />
           <div className="space-x-6">
             <a href="#home" className="hover:text-[#5B2CA2]">Home</a>
             <a href="#collection" className="hover:text-[#5B2CA2]">Collection</a>
@@ -65,19 +77,21 @@ export default function LuxuryCigarSite() {
         </nav>
       </header>
 
-      {/* Hero */}
+      {/* Home / Hero */}
       <section id="home" className="h-screen relative flex items-center justify-center text-center">
-        <img src="https://via.placeholder.com/1200x600?text=Hero+Video" className="absolute inset-0 w-full h-full object-cover" />
+        <video autoPlay muted loop className="absolute inset-0 w-full h-full object-cover opacity-55">
+          <source src="/cigar-smoke.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-[#232021]" />
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative z-10 max-w-3xl">
           <h1 className="text-5xl mb-6 text-[#5B2CA2]">{BRAND}</h1>
           <p className="mb-4 text-lg opacity-90">Explore Fine Cigars · Crafted for the Few</p>
           <p className="mb-8 text-md opacity-70 italic">{LOCATION}</p>
-          <button className="bg-[#5B2CA2] text-white text-lg px-10 py-6 rounded">Explore the Collection</button>
+          <Button onClick={() => document.getElementById("collection")?.scrollIntoView({ behavior: "smooth" })} className="bg-[#5B2CA2] text-white text-lg px-10 py-6">Explore the Collection</Button>
         </motion.div>
       </section>
 
-      {/* About */}
+      {/* About / Who We Are */}
       <section id="about" className="px-10 py-28 bg-[#2C292A] text-center">
         <h2 className="text-4xl mb-6 text-[#5B2CA2]">Who We Are</h2>
         <p className="max-w-3xl mx-auto opacity-85">
@@ -87,20 +101,20 @@ export default function LuxuryCigarSite() {
 
       {/* Collection */}
       <section id="collection" className="px-10 py-28 space-y-28">
-        <h2 className="text-4xl text-center text-[#7E49C7] font-semibold">2025 White Label Collection</h2>
+        <h2 className="text-4xl text-center text-[#5B2CA2]">2025 White Label Collection</h2>
         {Object.entries(products).map(([group, items]) => (
           <div key={group} className="space-y-12">
             <h3 className="text-3xl border-b border-[#5B2CA2] pb-3">{group} Series</h3>
             <div className="grid md:grid-cols-3 gap-10">
               {items.map((p) => (
                 <motion.div key={p.name} whileHover={{ y: -6 }} whileInView={{ opacity: 1 }} initial={{ opacity: 0 }} onClick={() => setSelected(p)} className="cursor-pointer">
-                  <div className="bg-[#2C292A] border border-[#5B2CA2]/40 overflow-hidden rounded">
-                    <div className="p-6 text-center">
-                      <img src={p.img} alt={p.name} className="w-full h-64 object-cover rounded" />
-                      <h4 className="text-xl mt-2">{p.name}</h4>
+                  <Card className="bg-[#2C292A] border border-[#5B2CA2]/40 overflow-hidden rounded">
+                    <CardContent className="p-6 space-y-2 text-center">
+                      <h4 className="text-xl">{p.name}</h4>
                       <p className="text-[#5B2CA2]">${p.price.toFixed(2)}</p>
-                    </div>
-                  </div>
+                      <Button size="sm" onClick={handlePurchaseClick} className="mt-2 w-full bg-[#5B2CA2] text-white">Purchase</Button>
+                    </CardContent>
+                  </Card>
                 </motion.div>
               ))}
             </div>
@@ -108,7 +122,7 @@ export default function LuxuryCigarSite() {
         ))}
       </section>
 
-      {/* Our Vision */}
+      {/* Our Vision Section */}
       <section className="px-10 py-28 text-center bg-black/40">
         <h2 className="text-4xl mb-6 text-[#5B2CA2]">Our Vision</h2>
         <p className="max-w-2xl mx-auto opacity-85">
@@ -117,7 +131,7 @@ export default function LuxuryCigarSite() {
       </section>
 
       {/* Footer */}
-      <footer ref={footerRef} className="px-10 py-16 border-t border-[#5B2CA2]/40 text-center space-y-4">
+      <footer id="footer" className="px-10 py-16 border-t border-[#5B2CA2]/40 text-center space-y-6">
         <h3 className="text-2xl text-[#5B2CA2]">Contact</h3>
         <div className="flex items-center justify-center gap-3 text-lg tracking-wide">
           <span className="inline-flex items-center justify-center w-8 h-8 border border-[#5B2CA2] rounded-full">
@@ -130,7 +144,7 @@ export default function LuxuryCigarSite() {
         <p className="text-xs opacity-60">Tobacco products are intended for adults of legal smoking age. Please smoke responsibly.</p>
       </footer>
 
-      {/* Product Side Panel */}
+      {/* Product Detail Side Panel */}
       {selected && (
         <motion.div
           initial={{ x: '100%' }}
@@ -145,20 +159,10 @@ export default function LuxuryCigarSite() {
             <p className="text-[#5B2CA2] text-xl">${selected.price.toFixed(2)}</p>
             <p className="opacity-80">{selected.ref}</p>
             <p className="opacity-90">{selected.details}</p>
-            <button
-              className="w-full bg-[#5B2CA2] text-white text-lg py-4 mt-4 rounded hover:bg-[#4a1f99]"
-              onClick={() => {
-                setSelected(null);
-                footerRef.current?.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
-              Purchase
-            </button>
+            <Button className="w-full bg-[#5B2CA2] text-white text-lg py-6">Purchase</Button>
           </div>
         </motion.div>
       )}
-
     </div>
   );
 }
-
