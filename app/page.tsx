@@ -55,6 +55,11 @@ export default function LuxuryCigarSite() {
     );
   }
 
+  const scrollToContact = () => {
+    const contactSection = document.getElementById("contact");
+    if (contactSection) contactSection.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className="bg-[#232021] text-[#EFE6D8] font-serif">
       {/* Header */}
@@ -88,7 +93,7 @@ export default function LuxuryCigarSite() {
           >
             Explore the Collection
           </Button>
-
+          
         </motion.div>
       </section>
 
@@ -142,7 +147,7 @@ export default function LuxuryCigarSite() {
       </section>
 
       {/* Footer */}
-      <footer id="footer" className="px-10 py-16 border-t border-[#5B2CA2]/40 text-center space-y-6">
+      <footer id="contact" className="px-10 py-16 border-t border-[#5B2CA2]/40 text-center space-y-6">
         <h3 className="text-2xl text-[#5B2CA2]">Contact</h3>
         <div className="flex items-center justify-center gap-3 text-lg tracking-wide">
           <span className="inline-flex items-center justify-center w-8 h-8 border border-[#5B2CA2] rounded-full">
