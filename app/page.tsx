@@ -35,10 +35,9 @@ export default function LuxuryCigarSite() {
   const [selected, setSelected] = useState<typeof products.Signum[0] | null>(null);
   const [verified, setVerified] = useState(false);
 
-  const handlePurchase = () => {
-    // Scroll to footer smoothly
-    const footer = document.getElementById("footer");
-    if (footer) footer.scrollIntoView({ behavior: "smooth" });
+  const scrollToContact = () => {
+    const contactSection = document.getElementById("contact");
+    if (contactSection) contactSection.scrollIntoView({ behavior: "smooth" });
   };
 
   if (!verified) {
@@ -54,11 +53,6 @@ export default function LuxuryCigarSite() {
       </div>
     );
   }
-
-  const scrollToContact = () => {
-    const contactSection = document.getElementById("contact");
-    if (contactSection) contactSection.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <div className="bg-[#232021] text-[#EFE6D8] font-serif">
@@ -175,7 +169,14 @@ export default function LuxuryCigarSite() {
             <p className="text-[#5B2CA2] text-xl">${selected.price.toFixed(2)}</p>
             <p className="opacity-80">{selected.ref}</p>
             <p className="opacity-90">{selected.details}</p>
-            <Button className="w-full bg-[#5B2CA2] text-white text-lg py-6" onClick={handlePurchase}>
+            <Button
+              className="w-full bg-[#5B2CA2] text-white text-lg py-6"
+              onClick={() => {
+                setSelected(null); // close side panel
+                const contactSection = document.getElementById("contact");
+                if (contactSection) contactSection.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               Purchase
             </Button>
           </div>
