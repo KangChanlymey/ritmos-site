@@ -101,7 +101,7 @@ export default function LuxuryCigarSite() {
 
       {/* Collection */}
       <section id="collection" className="px-16 py-32 space-y-32">
-        <h2 className="text-5xl text-center text-[#D4AF37] font-serif mb-16">2025 White Label Collection</h2>
+        <h2 className="text-5xl text-center text-[#D4AF37] font-serif mb-16">WHITE LABEL CUBAN COLLECTION 2025</h2>
         {Object.entries(products).map(([group, items]) => (
           <div key={group} className="space-y-12">
             <h3 className="text-3xl border-b border-[#D4AF37] pb-3 font-serif">{group} Series</h3>
