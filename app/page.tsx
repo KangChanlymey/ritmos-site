@@ -1,4 +1,4 @@
-"use client"; // Must be at the very top
+"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -32,10 +32,14 @@ const products = {
 };
 
 export default function LuxuryCigarSite() {
-  const [selected, setSelected] = useState<
-    { name: string; price: number; ref: string; img: string; details: string } | null
-  >(null);
+  const [selected, setSelected] = useState<typeof products.Signum[0] | null>(null);
   const [verified, setVerified] = useState(false);
+
+  const handlePurchase = () => {
+    // Scroll to footer smoothly
+    const footer = document.getElementById("footer");
+    if (footer) footer.scrollIntoView({ behavior: "smooth" });
+  };
 
   if (!verified) {
     return (
@@ -44,9 +48,7 @@ export default function LuxuryCigarSite() {
           <CardContent className="p-8 text-center space-y-6">
             <h1 className="text-2xl">Age Verification</h1>
             <p>You must be of legal smoking age to enter this site.</p>
-            <Button onClick={() => setVerified(true)} className="bg-[#C5A35C] text-black">
-              Enter Site
-            </Button>
+            <Button onClick={() => setVerified(true)} className="bg-[#C5A35C] text-black">Enter Site</Button>
           </CardContent>
         </Card>
       </div>
@@ -81,11 +83,13 @@ export default function LuxuryCigarSite() {
         </motion.div>
       </section>
 
-      {/* About / Our Vision */}
+      {/* About / Who We Are */}
       <section id="about" className="px-10 py-28 bg-[#2C292A] text-center">
-        <h2 className="text-4xl mb-6 text-[#5B2CA2]">Our Vision</h2>
+        <h2 className="text-4xl mb-6 text-[#5B2CA2]">Who We Are</h2>
         <p className="max-w-3xl mx-auto opacity-85">
-          We are a lifestyle and showcase platform dedicated to fine cigars, craftsmanship, and culture. This website exists to present select cigars, their stories, and their character — not as a store, but as a curated reference for those who appreciate the art behind the leaf. {LOCATION}.
+          We are a lifestyle and showcase platform dedicated to fine cigars, craftsmanship, and culture. 
+          This website exists to present select cigars, their stories, and their character — not as a store, 
+          but as a curated reference for those who appreciate the art behind the leaf. {LOCATION}.
         </p>
       </section>
 
@@ -105,11 +109,11 @@ export default function LuxuryCigarSite() {
                   onClick={() => setSelected(p)}
                   className="cursor-pointer"
                 >
-                  <Card className="bg-[#2C292A] border border-[#5B2CA2]/40 overflow-hidden">
+                  <Card className="bg-[#2C292A] border border-[#5B2CA2]/40 overflow-hidden rounded">
                     <CardContent className="p-6 space-y-2 text-center">
                       <h4 className="text-xl">{p.name}</h4>
                       <p className="text-[#5B2CA2]">${p.price.toFixed(2)}</p>
-                      <Button size="sm" onClick={() => setSelected(p)}>View</Button>
+                      <Button size="sm">View</Button>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -119,14 +123,23 @@ export default function LuxuryCigarSite() {
         ))}
       </section>
 
+      {/* Our Vision Section */}
+      <section className="px-10 py-28 text-center bg-black/40">
+        <h2 className="text-4xl mb-6 text-[#5B2CA2]">Our Vision</h2>
+        <p className="max-w-2xl mx-auto opacity-85">
+          We believe cigars are best understood through patience, environment, and experience. 
+          Every vitola shown here represents tradition, balance, and time — curated to inform, inspire, and elevate appreciation.
+        </p>
+      </section>
+
       {/* Footer */}
-      <footer id="contact" className="px-10 py-16 border-t border-[#5B2CA2]/40 text-center space-y-6">
+      <footer id="footer" className="px-10 py-16 border-t border-[#5B2CA2]/40 text-center space-y-6">
         <h3 className="text-2xl text-[#5B2CA2]">Contact</h3>
         <div className="flex items-center justify-center gap-3 text-lg tracking-wide">
           <span className="inline-flex items-center justify-center w-8 h-8 border border-[#5B2CA2] rounded-full">
             <span className="block w-3 h-3 border border-[#5B2CA2] rounded-full" />
           </span>
-          <a href="tel:+15551234567" className="hover:text-[#5B2CA2]">+1 (555) 123‑4567</a>
+          <a href="tel:+85512345012" className="hover:text-[#5B2CA2]">+ (855) 123‑450‑12</a>
         </div>
         <p className="text-sm opacity-75">Business Hours: Mon–Fri · 10:00 AM – 6:00 PM</p>
         <p className="text-xs opacity-60 italic">For inquiries only</p>
@@ -136,7 +149,7 @@ export default function LuxuryCigarSite() {
       {/* Product Detail Side Panel */}
       {selected && (
         <motion.div
-          initial={{ x: "100%" }}
+          initial={{ x: '100%' }}
           animate={{ x: 0 }}
           transition={{ duration: 0.4 }}
           className="fixed top-0 right-0 h-full w-full md:w-1/3 bg-[#2C292A] z-50 shadow-2xl border-l border-[#5B2CA2]/40 overflow-y-auto"
@@ -148,13 +161,7 @@ export default function LuxuryCigarSite() {
             <p className="text-[#5B2CA2] text-xl">${selected.price.toFixed(2)}</p>
             <p className="opacity-80">{selected.ref}</p>
             <p className="opacity-90">{selected.details}</p>
-            <Button
-              className="w-full bg-[#5B2CA2] text-white text-lg py-6"
-              onClick={() => {
-                const footer = document.getElementById("contact");
-                footer?.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
+            <Button className="w-full bg-[#5B2CA2] text-white text-lg py-6" onClick={handlePurchase}>
               Purchase
             </Button>
           </div>
@@ -163,3 +170,4 @@ export default function LuxuryCigarSite() {
     </div>
   );
 }
+
