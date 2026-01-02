@@ -79,7 +79,16 @@ export default function LuxuryCigarSite() {
           <h1 className="text-5xl mb-6 text-[#5B2CA2]">{BRAND}</h1>
           <p className="mb-4 text-lg opacity-90">Explore Fine Cigars · Crafted for the Few</p>
           <p className="mb-8 text-md opacity-70 italic">{LOCATION}</p>
-          <Button className="bg-[#5B2CA2] text-white text-lg px-10 py-6">Explore the Collection</Button>
+          <Button
+            className="bg-[#5B2CA2] text-white text-lg px-10 py-6"
+            onClick={() => {
+              const collectionSection = document.getElementById("collection");
+              if (collectionSection) collectionSection.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            Explore the Collection
+          </Button>
+
         </motion.div>
       </section>
 
